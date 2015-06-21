@@ -1,6 +1,7 @@
 import bge
-from mutil import sensors
+from mutil import sensors, properties
 from mbge import context
+import texture
 
 # BGE callables
 def prepareBlueScreen():
@@ -10,25 +11,17 @@ def prepareBlueScreen():
     filter = bge.texture.FilterBlueScreen()
     
     colorSetup = context.owner.get("filter.color", str(filter.color)[1:-1])
-    filter.color = parseIntegers(colorSetup)
+    filter.color = properties.parseAsList(colorSetup)
     
     limitsSetup = context.owner.get("filter.limits", str(filter.limits)[1:-1])
-    filter.limits = parseIntegers(limitsSetup)
+    filter.limits = properties.parseAsList(limitsSetup)
     
-    storeFilter(filter)
+    texture.storeFilter(filter)
 
 # End of BGE callables
 
-INTERNAL_PROPERTY_FILTER = "filter"
 
-def parseIntegers(input):
-    parts = input.split(",")
-    return [int(part) for part in parts]
 
-def storeFilter(filter):
-    context.owner[INTERNAL_PROPERTY_FILTER] = filter
 
-def retrieveFilter():
-    return context.owner.get(INTERNAL_PROPERTY_FILTER)
 
     

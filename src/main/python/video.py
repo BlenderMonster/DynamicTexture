@@ -44,6 +44,9 @@ def setup():
     texture.applyPreparedFilter(source)
     texture.storeTexture(texture.createDynamicTexture(source))
 
+def refresh():
+    if sensors.allPositive:
+        texture.refresh()
 
 def play():
     if sensors.allPositive:

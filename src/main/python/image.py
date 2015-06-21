@@ -3,7 +3,6 @@ __author__ = 'Monster'
 import bge
 from mbge import context, path
 from mutil import sensors
-import filter
 import texture
 
 PROPERTY_IMAGE_FILE_NAME = "image"

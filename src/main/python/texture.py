@@ -37,57 +37,14 @@ __author__ = "Monster"
 import bge
 from mbge import context, path
 from mutil import sensors
-import filter
 
-PROPERTY_CAMERA_NAME = "camera"
-'Provides the name of the camera to be used to create a camera resource.'
-
-# BGE callables
-
-def setCamera():
-    'Replaces the first material texture with a camera source'
-    if not sensors.allPositive:
-        return
- 
-    source = createCameraSource()
-    applyPreparedFilter(source)
-    texture = createDynamicTexture(source)
-    storeTexture(texture)
-
-    
 def refresh():
     'Refreshes the currently applied texture'
-    if not sensors.allPositive:
-        return
-    
     retrieveTexture().refresh(True)
 
-# End of BGE callables
-
 INTERNAL_PROPERTY_TEXTURE = "_texture"
+INTERNAL_PROPERTY_FILTER = "_filter"
 FIRST_MATERIAL_ID = 0
-
-def createCameraSource():
-    camera = retrieveAssignedCamera()
-    source = bge.texture.ImageRender(camera.scene, camera)
-    source.background = [0,0,0,0]
-    source.alpha = False
-    return source
-
-def retrieveAssignedCamera():
-    return findCamera(context.owner.get(PROPERTY_CAMERA_NAME))
-
-def findCamera(name, scene=None):
-    if scene:
-        return scene.cameras.get(name)
-    camera = bge.logic.getCurrentScene().cameras.get(name)
-    if camera:
-        return camera
-    for scene in bge.logic.getSceneList():
-        camera = findCamera(name, scene)
-        if camera:
-            return camera
-    raise KeyError("There is no camera with name '{}'".format(name))
 
 def createDynamicTexture(source):
     texture = bge.texture.Texture(context.owner, FIRST_MATERIAL_ID)
@@ -96,7 +53,7 @@ def createDynamicTexture(source):
     return texture
 
 def applyPreparedFilter(source):
-    preparedFilter = filter.retrieveFilter()
+    preparedFilter = retrieveFilter()
     if preparedFilter:
         source.filter = preparedFilter 
 
@@ -107,5 +64,11 @@ def retrieveTexture():
     try:
         return context.owner[INTERNAL_PROPERTY_TEXTURE]
     except KeyError:
-        raise KeyError("No texture assigned yet. Setup a dynamic texture first. E.g. via texture.setImage")
+        raise KeyError("No texture assigned yet. Setup a dynamic texture at object '{}' first. E.g. via texture.setImage"
+                       .format(context.owner))
 
+def storeFilter(filter):
+    context.owner[INTERNAL_PROPERTY_FILTER] = filter
+
+def retrieveFilter():
+    return context.owner.get(INTERNAL_PROPERTY_FILTER)
