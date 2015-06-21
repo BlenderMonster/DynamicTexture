@@ -3,10 +3,13 @@ from mutil import sensors, properties
 from mbge import context
 import texture
 
-PROPERTY_COLOR = "blueScreen:color"
-'''A string property with the comma separated components (r,g,b) of a color as integer from 0..255.'''
-PROPERTY_LIMITS = "blueScreen:limits"
-'''A string property with the comma separated components (lower, upper) of the limits as integer.'''
+DEFAULT_PREFIX = "blueScreen"
+'''The prefix to search for controller specific proeprties. Format: <prefix>:<property>'''
+
+PROPERTY_COLOR = "color"
+'''The suffix of a property containing the comma separated components (r,g,b) of a color as integer from 0..255.'''
+PROPERTY_LIMITS = "limits"
+'''The suffix of a property containing  the comma separated components (lower, upper) of the limits as integer.'''
 
 # BGE callables
 def setup():
@@ -15,10 +18,10 @@ def setup():
 
     filter = bge.texture.FilterBlueScreen()
     
-    colorSetup = context.owner.get(PROPERTY_COLOR, str(filter.color)[1:-1])
+    colorSetup = properties.getWithControllerPrefix(DEFAULT_PREFIX, PROPERTY_COLOR, str(filter.color)[1:-1])
     filter.color = properties.parseAsList(colorSetup)
 
-    limitsSetup = context.owner.get(PROPERTY_LIMITS, str(filter.limits)[1:-1])
+    limitsSetup = properties.getWithControllerPrefix(DEFAULT_PREFIX, PROPERTY_LIMITS, str(filter.limits)[1:-1])
     filter.limits = properties.parseAsList(limitsSetup)
 
     texture.storeFilter(filter)
