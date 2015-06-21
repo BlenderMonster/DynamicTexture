@@ -37,7 +37,6 @@ __author__ = "Monster"
 import bge
 from mbge import context, path
 from mutil import sensors
-import video
 import filter
 
 PROPERTY_CAMERA_NAME = "camera"
@@ -53,18 +52,6 @@ def setImage():
         return
     
     source = createImageSource() 
-    applyPreparedFilter(source)
-    texture = createDynamicTexture(source)
-    storeTexture(texture)
-
-def setVideo():
-    'Replaces the first material texture with an video source'
-    if not sensors.allPositive:
-        return
-
-    materialId = 0
-    
-    source = video.createSource()
     applyPreparedFilter(source)
     texture = createDynamicTexture(source)
     storeTexture(texture)

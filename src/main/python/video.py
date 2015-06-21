@@ -30,10 +30,21 @@ __author__ = "Monster"
 import bge
 from mutil import sensors, actuators
 from mbge import context, path
+import texture
 
 PROPERTY_VIDEO_FILE_NAME = "video"
 
 # BGE callables
+def setup():
+    'Replaces the first material texture with an video source'
+    if not sensors.allPositive:
+        return
+
+    source = createSource()
+    texture.applyPreparedFilter(source)
+    texture.storeTexture(texture.createDynamicTexture(source))
+
+
 def play():
     if sensors.allPositive:
         retrieveVideo().play()
