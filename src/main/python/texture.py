@@ -41,20 +41,8 @@ import filter
 
 PROPERTY_CAMERA_NAME = "camera"
 'Provides the name of the camera to be used to create a camera resource.'
-PROPERTY_IMAGE_FILE_NAME = "image"
-'Provides the name of the image file to be used to create an image source.'
 
 # BGE callables
-
-def setImage():
-    'Replaces the first material texture with an image source'
-    if not sensors.allPositive:
-        return
-    
-    source = createImageSource() 
-    applyPreparedFilter(source)
-    texture = createDynamicTexture(source)
-    storeTexture(texture)
 
 def setCamera():
     'Replaces the first material texture with a camera source'
@@ -78,10 +66,6 @@ def refresh():
 
 INTERNAL_PROPERTY_TEXTURE = "_texture"
 FIRST_MATERIAL_ID = 0
-
-def createImageSource():
-    fileName = path.expandPath("//"+getImageFileName())
-    return bge.texture.ImageFFmpeg(fileName)
 
 def createCameraSource():
     camera = retrieveAssignedCamera()
@@ -124,11 +108,4 @@ def retrieveTexture():
         return context.owner[INTERNAL_PROPERTY_TEXTURE]
     except KeyError:
         raise KeyError("No texture assigned yet. Setup a dynamic texture first. E.g. via texture.setImage")
-
-def getImageFileName():
-    try:
-        return context.owner[PROPERTY_IMAGE_FILE_NAME]
-    except KeyError:
-        raise KeyError("Please set up string property '{}' with the path to the image file"
-                       .format(PROPERTY_IMAGE_FILE_NAME))
 
