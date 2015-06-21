@@ -17,10 +17,10 @@ def setup():
     
     colorSetup = context.owner.get(PROPERTY_COLOR, str(filter.color)[1:-1])
     filter.color = properties.parseAsList(colorSetup)
-    
+
     limitsSetup = context.owner.get(PROPERTY_LIMITS, str(filter.limits)[1:-1])
     filter.limits = properties.parseAsList(limitsSetup)
-    
+
     texture.storeFilter(filter)
 
 # End of BGE callables
