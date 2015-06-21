@@ -56,12 +56,10 @@ def applyPreparedFilter(source):
     filters = retrieveFilters()
     if not filters:
         return
-    
     for filter in filters:
         if source.filter:
             filter.previous = source.filter
         source.filter = filter
-
 
 def storeTexture(texture):
     context.owner[INTERNAL_PROPERTY_TEXTURE] = texture
