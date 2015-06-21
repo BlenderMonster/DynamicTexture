@@ -43,7 +43,7 @@ def refresh():
     retrieveTexture().refresh(True)
 
 INTERNAL_PROPERTY_TEXTURE = "_texture"
-INTERNAL_PROPERTY_FILTER = "_filter"
+INTERNAL_PROPERTY_FILTERS = "_filters"
 FIRST_MATERIAL_ID = 0
 
 def createDynamicTexture(source):
@@ -53,9 +53,15 @@ def createDynamicTexture(source):
     return texture
 
 def applyPreparedFilter(source):
-    preparedFilter = retrieveFilter()
-    if preparedFilter:
-        source.filter = preparedFilter 
+    filters = retrieveFilters()
+    if not filters:
+        return
+    
+    for filter in filters:
+        if source.filter:
+            filter.previous = source.filter
+        source.filter = filter
+
 
 def storeTexture(texture):
     context.owner[INTERNAL_PROPERTY_TEXTURE] = texture
@@ -68,7 +74,12 @@ def retrieveTexture():
                        .format(context.owner))
 
 def storeFilter(filter):
-    context.owner[INTERNAL_PROPERTY_FILTER] = filter
+    try:
+        filters = context.owner[INTERNAL_PROPERTY_FILTERS]
+    except KeyError:
+        filters = []
+    filters.append(filter)
+    context.owner[INTERNAL_PROPERTY_FILTERS] = filters
 
-def retrieveFilter():
-    return context.owner.get(INTERNAL_PROPERTY_FILTER)
+def retrieveFilters():
+    return context.owner.get(INTERNAL_PROPERTY_FILTERS)
