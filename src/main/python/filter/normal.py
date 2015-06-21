@@ -3,10 +3,13 @@ from mutil import sensors, properties
 from mbge import context
 import texture
 
-PROPERTY_COMPONENT = "normal:component"
-'''A string property of the color component to filter on (red, green, or blue)'''
-PROPERTY_DEPTH = "normal:depth"
-'''The depth of the relief (float)'''
+DEFAULT_PREFIX = "normal"
+'''The prefix to search for controller specific proeprties. Format: <prefix>:<property>'''
+
+PROPERTY_COMPONENT = "component"
+'''The suffix of a property containing the color component to filter on (red, green, or blue)'''
+PROPERTY_DEPTH = "depth"
+'''The suffix of a property containing the depth of the relief (float)'''
 
 # BGE callables
 def setup():
@@ -15,11 +18,11 @@ def setup():
 
     filter = bge.texture.FilterNormal()
     
-    componentName = context.owner.get(PROPERTY_COMPONENT)
+    componentName = properties.getWithControllerPrefix(DEFAULT_PREFIX, PROPERTY_COMPONENT)
     if componentName:
         filter.colorIdx = componentMapping[componentName]
 
-    filter.depth = float(context.owner.get(PROPERTY_DEPTH, filter.depth))
+    filter.depth = float(properties.getWithControllerPrefix(DEFAULT_PREFIX, PROPERTY_DEPTH, filter.depth))
 
     texture.storeFilter(filter)
 
