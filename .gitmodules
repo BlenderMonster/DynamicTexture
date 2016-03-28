@@ -1,0 +1,4 @@
+[submodule "MBGE"]
+	path = MBGE
+	url = https://github.com/BlenderMonster/MBGE.git
+	branch = runtime
