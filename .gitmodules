@@ -1,0 +1,6 @@
+[submodule "libraries/DynamicTexture"]
+	path = libraries/DynamicTexture
+	url = https://github.com/BlenderMonster/DynamicTexture.git
+[submodule "libraries/MBGE"]
+	path = libraries/MBGE
+	url = https://github.com/BlenderMonster/MBGE.git
